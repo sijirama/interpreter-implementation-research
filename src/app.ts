@@ -1,11 +1,15 @@
 import Express from "express"
 import { env } from "./config/environment"
+import mongoose from "mongoose"
+import { connectDatabase } from "./config/connectDB"
+connectDatabase()
 const app = Express()
-//const PORT = process.env.PORT || 5173
 
 
 
-
-app.listen( env.PORT , () => {
-    console.log("Server is now listening at port:", env.PORT)
+mongoose.connection.once("open" , () => {
+    app.listen( env.PORT , () => {
+        console.clear()
+        console.log("Server is now listening at port:", env.PORT)
+    })
 })
