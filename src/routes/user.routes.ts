@@ -7,7 +7,7 @@ const router = Router()
 router.get("/" , UserController.getAllUsers)
 
 
-export default router 
+export {router }
 
 
 
