@@ -19,4 +19,22 @@ export async function getAllBlogs (request:Request , response:Response){
     return response.status(200).json({message:"Sucess" , data:blogs})
 }
 
+export async function addBlog (request:Request , response:Response){
+    const {title, description , image , user} = request.body
+
+    const blog = new BlogModel({
+        title,
+        description,
+        image,
+        user
+    })
+
+    try {
+       blog.save() 
+    } catch (error) {
+        return response.status(500).json({message:"Error saving blog"})
+    }
+
+    return response.status(200).json({message:"Sucess" , data:blog})
+}
  
