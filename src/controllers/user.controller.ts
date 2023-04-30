@@ -36,7 +36,8 @@ export async function signup (request:Request , response:Response){
     const user = new UserModel({
         name,
         email,
-        password:hashedpassword
+        password:hashedpassword,
+        blogs:[]
     })
     try {
         user.save()

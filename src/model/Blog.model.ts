@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { UserModel } from "./User.model";
 const Schema = mongoose.Schema
 
 const BlogSchema = new Schema({    
@@ -15,7 +16,8 @@ const BlogSchema = new Schema({
         required:true,
     },
     user:{
-        type:String,
+        type:mongoose.Types.ObjectId,
+        ref:"UserModel",
         required:true,
     }
 })

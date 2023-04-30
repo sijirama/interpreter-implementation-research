@@ -1,6 +1,8 @@
 import {BlogModel } from "../model/Blog.model";
 import { Request , Response  } from "express";
 import { env } from "../config/environment";
+import { UserModel } from "../model/User.model";
+import mongoose from "mongoose";
 
 //NOTE: samples
 //export async function {name} (request:Request , response:Response){
@@ -50,6 +52,22 @@ export async function getAllBlogs (request:Request , response:Response){
 export async function addBlog (request:Request , response:Response){
     const {title, description , image , user} = request.body
 
+    //NOTE: identify user
+    //WARN: this method isnt really the best, we can use jwts and identify the user and send it to the route body as req.user instead of re.body.user
+
+    let existingUser:Partial<mongoose.Document> | any
+    //let existingUser
+
+    try {
+        existingUser= UserModel.findById(user)
+    } catch (error) {
+        return response.status(500).json({message:"Error: Server error "})
+    }
+
+    if(!existingUser){
+        return response.status(404).json({message:"Unable to identify user"})
+    }
+
     const blog = new BlogModel({
         title,
         description,
@@ -58,7 +76,14 @@ export async function addBlog (request:Request , response:Response){
     })
 
     try {
-       await blog.save() 
+        
+        const session = await mongoose.startSession()
+        session.startTransaction()
+        await blog.save({session})
+        existingUser.blogs.push(blog)
+        await existingUser.save!({session})
+        await session.commitTransaction()
+
     } catch (error) {
         return response.status(500).json({message:"Error saving blog"})
     }
