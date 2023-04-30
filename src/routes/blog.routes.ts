@@ -4,6 +4,7 @@ import * as BlogController from "../controllers/blog.controller"
 const router = Router()
 
 router.get("/" , BlogController.getAllBlogs )
+router.post("/addblog" , BlogController.addBlog )
 
 
 export {router }

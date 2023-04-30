@@ -30,7 +30,7 @@ export async function addBlog (request:Request , response:Response){
     })
 
     try {
-       blog.save() 
+       await blog.save() 
     } catch (error) {
         return response.status(500).json({message:"Error saving blog"})
     }
