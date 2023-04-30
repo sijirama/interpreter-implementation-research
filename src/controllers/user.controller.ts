@@ -1,14 +1,18 @@
 import { UserModel } from "../model/User.model";
 import { Request , Response  } from "express";
+import bcrypt from "bcrypt"
+import { env } from "../config/environment";
 
 //NOTE: samples
 //export async function {name} (request:Request , response:Response){
 // return response.status().json({})
 
 export async function getAllUsers (request:Request , response:Response){
+    //console.log("Heelo world")
     let users
 
     try {
+       //console.log("try block ")
        users = await UserModel.find() 
     } catch (error) {
         return response.status(500).json({message:"Error fetching Users"})
@@ -27,7 +31,7 @@ export async function signup (request:Request , response:Response){
     let existingUser
 
     try {
-       existingUser = await UserModel.find({email}) 
+       existingUser = await UserModel.findOne({email}) 
     } catch (error) {
         return response.status(500).json({message:"Error creating new account"})
     }
@@ -36,10 +40,13 @@ export async function signup (request:Request , response:Response){
         return response.status(400).json({message:"User already exists"})
     }
 
+    const hashedpassword = bcrypt.hashSync(password , env.BcryptSalt)
+    console.log(hashedpassword)
+
     const user = new UserModel({
         name,
         email,
-        password
+        password:hashedpassword
     })
 
     try {
