@@ -3,6 +3,7 @@ import { Request , Response  } from "express";
 import { env } from "../config/environment";
 import { UserModel } from "../model/User.model";
 import mongoose from "mongoose";
+import { Session } from "inspector";
 
 //NOTE: samples
 //export async function {name} (request:Request , response:Response){
@@ -74,10 +75,12 @@ export async function addBlog (request:Request , response:Response){
         image,
         user
     })
+    
+    let session
 
     try {
         
-        const session = await mongoose.startSession()
+        session = await mongoose.startSession()
         session.startTransaction()
         await blog.save({session})
         existingUser.blogs.push(blog)
@@ -86,6 +89,7 @@ export async function addBlog (request:Request , response:Response){
 
     } catch (error) {
         console.log(error)
+        await session?.abortTransaction()
         return response.status(500).json({message:"Error saving blog"})
     }
 
