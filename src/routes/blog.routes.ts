@@ -8,6 +8,7 @@ router.delete("/:id" , BlogController.deleteBlog )
 router.get("/" , BlogController.getAllBlogs )
 router.post("/addblog" , BlogController.addBlog )
 router.put("/updateblog/:id" , BlogController.updateblog )
+router.get("/user/:id" , BlogController.getUserblog )
 
 
 export {router }

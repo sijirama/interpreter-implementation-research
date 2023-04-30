@@ -25,10 +25,14 @@ export async function getBlog (request:Request , response:Response){
 
 export async function deleteBlog (request:Request , response:Response){
     const id = request.params.id
-    let blog
+    let blog:any
     try {
-        blog = await BlogModel.findByIdAndDelete(id).exec()
+        blog = await BlogModel.findByIdAndDelete(id).populate("user").exec()
+        await blog.user.blogs.pull(blog)
+        await blog.user.save()
+        console.log("Deleted blog")
     } catch (error) {
+        console.log(error)
         return response.status(500).json({message:"Error fetching Blog"})
     }
     if(!blog){
@@ -106,4 +110,23 @@ export async function updateblog (request:Request , response:Response){
         return response.status(500).json({message:"Error Updating blog"})
     }
     return response.status(200).json({message:"Sucessfully update blog" })
+}
+
+
+export async function getUserblog (request:Request , response:Response){
+    const id = request.params.id
+    
+    let userBlogs
+
+    try {
+        userBlogs = UserModel.findById(id).polygon("blogs").exec()
+    } catch (error) {
+        return response.status(500).json({message:"Error Fetching user blogs"})
+    }
+
+    if(!userBlogs){
+        return response.status(400).json({message:"No blogs to fetch here"})
+    }
+
+    return response.status(200).json({message:"Sucessfully update blog", blogs:userBlogs })
 }

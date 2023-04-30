@@ -20,7 +20,7 @@ const UserSchema:any = new Schema({
     },
     blogs:[{
         type:mongoose.Types.ObjectId,
-        ref:BlogModel,
+        ref:"blog",
         required:true
     }]
 })
