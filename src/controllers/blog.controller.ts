@@ -116,11 +116,14 @@ export async function updateblog (request:Request , response:Response){
 export async function getUserblog (request:Request , response:Response){
     const id = request.params.id
     
+    
     let userBlogs
 
     try {
-        userBlogs = UserModel.findById(id).polygon("blogs").exec()
+        userBlogs = await UserModel.findById(id).populate("blogs").exec()
+        console.log(userBlogs)
     } catch (error) {
+        console.log(error)
         return response.status(500).json({message:"Error Fetching user blogs"})
     }
 
