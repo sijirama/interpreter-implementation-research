@@ -2,19 +2,21 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema
 
 const BlogSchema = new Schema({    
-    name:{
+    tile:{
         type:String,
         required:true
     },
-    email:{
+    description:{
         type:String,
         required:true,
-        unique:true
     },
-    password:{
+    image:{
         type:String,
         required:true,
-        minlength:6,
+    },
+    user:{
+        type:String,
+        required:true,
     }
 })
 
