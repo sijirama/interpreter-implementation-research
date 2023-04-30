@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema
 
 const BlogSchema = new Schema({    
-    tile:{
+    title:{
         type:String,
         required:true
     },
