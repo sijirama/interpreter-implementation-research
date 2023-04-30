@@ -59,7 +59,7 @@ export async function addBlog (request:Request , response:Response){
     //let existingUser
 
     try {
-        existingUser= UserModel.findById(user)
+        existingUser= await UserModel.findById(user).exec()
     } catch (error) {
         return response.status(500).json({message:"Error: Server error "})
     }
@@ -85,6 +85,7 @@ export async function addBlog (request:Request , response:Response){
         await session.commitTransaction()
 
     } catch (error) {
+        console.log(error)
         return response.status(500).json({message:"Error saving blog"})
     }
 
