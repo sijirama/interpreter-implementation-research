@@ -10,7 +10,8 @@ export async function getBlog (request:Request , response:Response){
     const id = request.params.id
     let blog
     try {
-        blog = BlogModel.findById(id)
+        blog = await BlogModel.findById(id).exec()
+        console.log(blog)
     } catch (error) {
         return response.status(500).json({message:"Error fetching Blog"})
     }
