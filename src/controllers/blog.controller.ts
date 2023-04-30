@@ -11,7 +11,6 @@ export async function getBlog (request:Request , response:Response){
     let blog
     try {
         blog = await BlogModel.findById(id).exec()
-        console.log(blog)
     } catch (error) {
         return response.status(500).json({message:"Error fetching Blog"})
     }
@@ -21,6 +20,19 @@ export async function getBlog (request:Request , response:Response){
     return response.status(200).json({message:"Sucess" , data:blog})
 }
 
+export async function deleteBlog (request:Request , response:Response){
+    const id = request.params.id
+    let blog
+    try {
+        blog = await BlogModel.findByIdAndDelete(id).exec()
+    } catch (error) {
+        return response.status(500).json({message:"Error fetching Blog"})
+    }
+    if(!blog){
+        return response.status(404).json({message:"Error fetching blog"})
+    }
+    return response.status(200).json({message:"Sucess deleting blog" , data:blog})
+}
 
 export async function getAllBlogs (request:Request , response:Response){
     let blogs 
