@@ -1,9 +1,1 @@
-
-journey of building lexers and parser
-
-
-    Math Parser
-    JSON Parser
-    CSV Reader
-    Config File Parser
-
+i don't know how to build a programming language
