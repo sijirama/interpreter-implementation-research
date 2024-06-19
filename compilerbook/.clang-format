@@ -1,0 +1,18 @@
+# Based on LLVM coding standards
+BasedOnStyle: LLVM
+
+AllowShortFunctionsOnASingleLine: All
+
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+PointerAlignment: Left
+
+IncludeCategories:
+  - Regex: '^<.*\.h>'
+    Priority: 1
+  - Regex: '^<.*'
+    Priority: 2
+  - Regex: '.*'
+    Priority: 3
