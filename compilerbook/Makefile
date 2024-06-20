@@ -1,40 +1,28 @@
 
-# Compiler and flags
-CXX = g++
-CXXFLAGS = -std=c++17
+# Variables
+CC = g++
+FLEX = flex
+CFLAGS = -Wall -Wextra -Wno-unused-function -std=c++11
+LDFLAGS =
 
-# Source file and executable name
-SRC = main.cpp
-EXE = main
+# Targets
+all: scanner
 
-# Default target to build the executable with -O0 optimization
-default: $(EXE)_O0
+scanner: lex.yy.o main.o
+	$(CC) $(LDFLAGS) -o scanner lex.yy.o main.o
 
-# Targets for different optimization levels
-O0: CXXFLAGS += -O0
-O1: CXXFLAGS += -O1
-O2: CXXFLAGS += -O2
-O3: CXXFLAGS += -O3
-Os: CXXFLAGS += -Os
+lex.yy.o: lex.yy.c token.h
+	$(CC) $(CFLAGS) -c lex.yy.c
 
-$(EXE)_O0: $(SRC)
-	$(CXX) $(CXXFLAGS) -o $(EXE) $(SRC)
+main.o: main.cpp token.h
+	$(CC) $(CFLAGS) -c main.cpp token.h
 
-$(EXE)_O1: $(SRC)
-	$(CXX) $(CXXFLAGS) -o $(EXE)_O1 $(SRC)
+lex.yy.c: scanner.lex
+	$(FLEX) -o lex.yy.c scanner.lex
 
-$(EXE)_O2: $(SRC)
-	$(CXX) $(CXXFLAGS) -o $(EXE)_O2 $(SRC)
-
-$(EXE)_O3: $(SRC)
-	$(CXX) $(CXXFLAGS) -o $(EXE)_O3 $(SRC)
-
-$(EXE)_Os: $(SRC)
-	$(CXX) $(CXXFLAGS) -o $(EXE)_Os $(SRC)
-
-# Clean target
 clean:
-	rm -f $(EXE) $(EXE)_O1 $(EXE)_O2 $(EXE)_O3 $(EXE)_Os
+	rm -f scanner lex.yy.c lex.yy.o main.o token.h.gch
 
-.PHONY: clean default O0 O1 O2 O3 Os
+# Phony targets
+.PHONY: all clean
 

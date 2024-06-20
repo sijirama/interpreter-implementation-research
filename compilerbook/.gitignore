@@ -1,3 +1,7 @@
 main
 .cache
-
+lex.yy.c
+lex.yy.o
+main.o
+program.c
+scanner

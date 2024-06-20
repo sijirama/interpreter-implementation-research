@@ -1,21 +1,22 @@
-#include <chrono>
-#include <cmath>
+#include <cstdio>
 #include <iostream>
-#include <vector>
+#include "token.h"
 
-void compute() {
-    std::vector<double> v(1000000);
-    for (size_t i = 0; i < v.size(); ++i) {
-        v[i] = std::sin(i) * std::cos(i);
-    }
-}
+extern FILE* yyin;
+extern token_t yylex();
+extern char* yytext;
 
 int main() {
-    auto start = std::chrono::high_resolution_clock::now();
-    compute();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> elapsed = end - start;
-    std::cout << "Elapsed time: " << elapsed.count() << " seconds\n";
+    yyin = fopen(("compile_commands.json"), "r");
+    if (!yyin) {
+        std::cout << "Error opening file" << std::endl;
+        return 1;
+    }
 
-    return 0;
+    while (true) {
+        token_t t = yylex();
+        if (t == TOKEN_EOF)
+            break;
+        std::cout << "token: " << t << " text: " << yytext << std::endl;
+    }
 }
