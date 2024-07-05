@@ -6,10 +6,10 @@ CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++11
 
 # Define the source files
-SRCS = main.cpp
+SRCS = main.cpp error/error.cpp
 
 # Define the output binary
-TARGET = main
+TARGET = lox
 
 # Define the object files (derived from the source files)
 OBJS = $(SRCS:.cpp=.o)
