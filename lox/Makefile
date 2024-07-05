@@ -6,7 +6,7 @@ CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++11
 
 # Define the source files
-SRCS = main.cpp error/error.cpp
+SRCS = main.cpp error/error.cpp scanner/scanner.cpp
 
 # Define the output binary
 TARGET = lox
@@ -15,8 +15,9 @@ TARGET = lox
 OBJS = $(SRCS:.cpp=.o)
 
 # Default rule to build and run the project
+#@./$(TARGET)
+
 all: $(TARGET)
-	@./$(TARGET)
 
 # Rule to build the target binary
 $(TARGET): $(OBJS)
