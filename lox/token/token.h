@@ -1,4 +1,5 @@
 
+#include <any>
 #include <string>
 
 enum class TokenType {
@@ -53,11 +54,12 @@ enum class TokenType {
 class Token {
   private:
     TokenType type;
+    // std::string lexeme;
     std::string lexeme;
-    std::string literal;
+    std::any literal;
     int line;
 
   public:
-    Token(TokenType type, std::string lexeme, std::string literal, int line);
+    Token(TokenType type, std::string lexeme, std::any literal, int line);
     std::string toString();
 };

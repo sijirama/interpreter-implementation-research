@@ -1,7 +1,9 @@
-
+#include <any>
 #include <string>
 #include <vector>
+#include "../error/error.h"
 #include "../token/token.h"
+#include "../utils/util.h"
 
 class Scanner {
   private:
@@ -12,11 +14,22 @@ class Scanner {
     int line = 1;
 
   public:
+    bool match(char expected);
     Scanner(std::string source);
     std::vector<Token> scanTokens();
     bool isAtEnd();
     void scanToken();
     char advance();
     void addToken(TokenType type);
-    void addToken(TokenType type, std::string literal);
+    void addToken(TokenType type, std::any literal);
+    char peek();
+    char peekNext();
+
+    bool isDigit(char c);
+
+    void stringLiteral();
+    void numberLiteral();
+    void identifier();
+    bool isAlpha(char c);
+    bool isAlphanumeric(char c);
 };
