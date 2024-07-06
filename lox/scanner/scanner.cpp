@@ -175,3 +175,5 @@ vector<Token> Scanner::scanTokens() {
     tokens.push_back(Token(TokenType::END_OF_FILE, "", "", line));
     return tokens;
 }
+
+
