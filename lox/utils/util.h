@@ -1,6 +1,9 @@
-
 #include <any>
 #include <string>
 
-int AnyToInt(std::any value);
-std::string AnyToString(std::any value);
+using namespace std;
+
+string substring(const string& str, int beginIndex, int endIndex);
+string substring(const string& str, int beginIndex);
+
+template <typename T> T castAny(std::any value);

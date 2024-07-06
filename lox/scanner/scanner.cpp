@@ -1,6 +1,7 @@
 #include "scanner.h"
 #include <cctype>
 #include <cstddef>
+#include <iostream>
 #include <string>
 #include <utility>
 
@@ -90,11 +91,11 @@ void Scanner::scanToken() {
 }
 
 void Scanner::identifier() {
-    if (isAlphanumeric(peek()))
+    while (isAlphanumeric(peek()))
         advance();
-    string text = source.substr(start, current);
+    string text = substring(source, start, current);
     TokenType type;
-    if (keywords.count(text) > 0) { //check if keyword is in map
+    if (keywords.count(text) > 0) { // check if keyword is in map
         type = keywords[text];
     } else {
         type = TokenType::IDENTIFIER;
@@ -117,7 +118,8 @@ void Scanner::numberLiteral() {
         while (isDigit(peek()))
             advance();
     }
-    addToken(TokenType::NUMBER, stof(source.substr(start, current)));
+    // addToken(TokenType::NUMBER, stof(source.substr(start, current)));
+    addToken(TokenType::NUMBER, stof(substring(source, start, current)));
 }
 
 char Scanner::peekNext() {
@@ -139,7 +141,8 @@ void Scanner::stringLiteral() {
         return;
     }
     advance();
-    string value = source.substr(start + 1, current - 1);
+    // string value = source.substr(start + 1, current - 1);
+    string value = substring(source, start + 1, current - 1);
     addToken(TokenType::STRING, value);
 }
 
@@ -179,14 +182,14 @@ Scanner::Scanner(string source) : source(source) {
 }
 
 bool Scanner::isAtEnd() {
-    bool ans = current >= static_cast<int>(source.length());
-    return ans;
+    ;
+    return current >= static_cast<int>(source.length());
 }
 
 void Scanner::addToken(TokenType type) { addToken(type, ""); }
 
 void Scanner::addToken(TokenType type, any literal) {
-    string text = source.substr(start, current);
+    string text = substring(source, start, current);
     tokens.push_back(Token(type, text, literal, line));
 }
 
@@ -198,6 +201,7 @@ char Scanner::advance() {
 vector<Token> Scanner::scanTokens() {
     while (!isAtEnd()) {
         start = current;
+        scanToken();
     };
     tokens.push_back(Token(TokenType::END_OF_FILE, "", "", line));
     return tokens;

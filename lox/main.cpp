@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -7,6 +8,7 @@
 using namespace std;
 
 void run(string fileContent) {
+    // std::cout << fileContent;
     Scanner scanner(fileContent);
     vector<Token> tokens = scanner.scanTokens();
 
