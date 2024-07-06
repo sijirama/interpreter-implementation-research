@@ -1,6 +1,8 @@
 #include "scanner.h"
 #include <cctype>
+#include <cstddef>
 #include <string>
+#include <utility>
 
 using namespace std;
 void Scanner::scanToken() {
@@ -78,6 +80,8 @@ void Scanner::scanToken() {
     default:
         if (isDigit(c)) {
             numberLiteral();
+        } else if (isAlpha(c)) {
+            identifier();
         } else {
             error(line, "Unexpected character");
         }
@@ -88,8 +92,14 @@ void Scanner::scanToken() {
 void Scanner::identifier() {
     if (isAlphanumeric(peek()))
         advance();
-
-    addToken(TokenType::IDENTIFIER);
+    string text = source.substr(start, current);
+    TokenType type;
+    if (keywords.count(text) > 0) { //check if keyword is in map
+        type = keywords[text];
+    } else {
+        type = TokenType::IDENTIFIER;
+    }
+    addToken(type);
 }
 
 bool Scanner::isAlpha(char c) {
@@ -149,7 +159,24 @@ bool Scanner::match(char expected) {
     return true;
 }
 
-Scanner::Scanner(string source) : source(source) {}
+Scanner::Scanner(string source) : source(source) {
+    keywords.insert(pair<string, TokenType>("and", TokenType::AND));
+    keywords.insert(pair<string, TokenType>("class", TokenType::CLASS));
+    keywords.insert(pair<string, TokenType>("else", TokenType::ELSE));
+    keywords.insert(pair<string, TokenType>("false", TokenType::FALSE));
+    keywords.insert(pair<string, TokenType>("for", TokenType::FOR));
+    keywords.insert(pair<string, TokenType>("fun", TokenType::FOR));
+    keywords.insert(pair<string, TokenType>("if", TokenType::IF));
+    keywords.insert(pair<string, TokenType>("nil", TokenType::NIL));
+    keywords.insert(pair<string, TokenType>("or", TokenType::OR));
+    keywords.insert(pair<string, TokenType>("print", TokenType::PRINT));
+    keywords.insert(pair<string, TokenType>("return", TokenType::RETURN));
+    keywords.insert(pair<string, TokenType>("super", TokenType::SUPER));
+    keywords.insert(pair<string, TokenType>("this", TokenType::THIS));
+    keywords.insert(pair<string, TokenType>("true", TokenType::TRUE));
+    keywords.insert(pair<string, TokenType>("var", TokenType::VAR));
+    keywords.insert(pair<string, TokenType>("while", TokenType::WHILE));
+}
 
 bool Scanner::isAtEnd() {
     bool ans = current >= static_cast<int>(source.length());
@@ -175,5 +202,3 @@ vector<Token> Scanner::scanTokens() {
     tokens.push_back(Token(TokenType::END_OF_FILE, "", "", line));
     return tokens;
 }
-
-
