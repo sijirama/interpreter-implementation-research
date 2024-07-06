@@ -4,9 +4,22 @@
 #include <utility>
 
 using namespace std;
-void Scanner::scanToken() {
 
-    char c = advance(); // source[current - 1]
+vector<Token> Scanner::scanTokens() { // iterate over every characcter in the
+                                      // source and calls scanToken on it
+    while (!isAtEnd()) {
+        start = current;
+        scanToken();
+    };
+    tokens.push_back(Token(TokenType::END_OF_FILE, "", "", line));
+    return tokens;
+}
+
+void Scanner::scanToken() { // processes the character that the current index is
+                            // on or something, my docs are bad as fuck
+
+    char c = advance(); // source[current - 1] so for the first character it is
+                        // index 0 in the code so yh
 
     switch (c) {
     case '(':
@@ -43,7 +56,7 @@ void Scanner::scanToken() {
         addToken(match('=') ? TokenType::BANG_EQUAL : TokenType::BANG);
         break;
     case '=':
-        addToken(match('=') ? TokenType::EQUAL_EQUAL : TokenType::LESS);
+        addToken(match('=') ? TokenType::EQUAL_EQUAL : TokenType::EQUAL);
         break;
     case '<':
         addToken(match('=') ? TokenType::LESS_EQUAL : TokenType::LESS);
@@ -194,13 +207,4 @@ void Scanner::addToken(TokenType type, any literal) {
 char Scanner::advance() {
     current++;
     return source[current - 1];
-}
-
-vector<Token> Scanner::scanTokens() {
-    while (!isAtEnd()) {
-        start = current;
-        scanToken();
-    };
-    tokens.push_back(Token(TokenType::END_OF_FILE, "", "", line));
-    return tokens;
 }
