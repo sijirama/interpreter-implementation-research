@@ -6,7 +6,7 @@ CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++11
 
 # Define the source files
-SRCS = main.cpp error/error.cpp scanner/scanner.cpp
+SRCS = main.cpp error/error.cpp scanner/scanner.cpp token/token.cpp
 
 # Define the output binary
 TARGET = lox

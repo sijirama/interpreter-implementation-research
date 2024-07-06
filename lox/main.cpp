@@ -2,18 +2,16 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <string>
-#include <vector>
 #include "scanner/scanner.h"
 
 using namespace std;
 
 void run(string fileContent) {
     Scanner scanner(fileContent);
-    vector<string> tokens = scanner.scanTokens();
+    vector<Token> tokens = scanner.scanTokens();
 
-    for (string token : tokens) {
-        cout << token << endl;
+    for (Token token : tokens) {
+        cout << token.toString() << endl;
     }
 }
 
