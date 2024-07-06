@@ -1,7 +1,5 @@
 #include "scanner.h"
 #include <cctype>
-#include <cstddef>
-#include <iostream>
 #include <string>
 #include <utility>
 

@@ -8,7 +8,6 @@
 using namespace std;
 
 void run(string fileContent) {
-    // std::cout << fileContent;
     Scanner scanner(fileContent);
     vector<Token> tokens = scanner.scanTokens();
 
