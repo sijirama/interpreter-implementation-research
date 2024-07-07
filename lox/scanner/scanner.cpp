@@ -65,10 +65,11 @@ void Scanner::scanToken() { // processes the character that the current index is
         addToken(match('=') ? TokenType::GREATER_EQUAL : TokenType::GREATER);
         break;
     case '/':
-        if (match('/')) {
-            // so it's a comment
+        if (match('/')) { // so it's a comment
             while (peek() != '\n' && !isAtEnd())
                 advance();
+        } else if (match('*')) {
+            handleComment();
         } else {
             addToken(TokenType::SLASH);
         }
@@ -99,6 +100,37 @@ void Scanner::scanToken() { // processes the character that the current index is
         }
         break;
     }
+}
+
+void Scanner::handleComment() {
+    while (peek() != '*' && peekNext() != '/') {
+        if (peek() == '\n')
+            line++;
+        advance();
+    }
+
+    if (isAtEnd()) {
+        error(line, "Unterminated Comment");
+        return;
+    }
+    advance();
+    advance();
+}
+
+void Scanner::stringLiteral() {
+    while (peek() != '"' && !isAtEnd()) {
+        if (peek() == '\n')
+            line++;
+        advance();
+    }
+    if (isAtEnd()) {
+        error(line, "Unterminated string");
+        return;
+    }
+    advance();
+    // string value = source.substr(start + 1, current - 1);
+    string value = substring(source, start + 1, current - 1);
+    addToken(TokenType::STRING, value);
 }
 
 void Scanner::identifier() {
@@ -140,22 +172,6 @@ char Scanner::peekNext() {
 }
 
 bool Scanner::isDigit(char c) { return c >= '0' && c <= '9'; }
-
-void Scanner::stringLiteral() {
-    while (peek() != '"' && !isAtEnd()) {
-        if (peek() == '\n')
-            line++;
-        advance();
-    }
-    if (isAtEnd()) {
-        error(line, "Unterminated string");
-        return;
-    }
-    advance();
-    // string value = source.substr(start + 1, current - 1);
-    string value = substring(source, start + 1, current - 1);
-    addToken(TokenType::STRING, value);
-}
 
 char Scanner::peek() {
     if (isAtEnd())

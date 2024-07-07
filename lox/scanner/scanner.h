@@ -32,6 +32,7 @@ class Scanner {
     void stringLiteral();
     void numberLiteral();
     void identifier();
+    void handleComment();
     bool isAlpha(char c);
     bool isAlphanumeric(char c);
 };

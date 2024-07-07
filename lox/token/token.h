@@ -3,8 +3,7 @@
 #include "../utils/util.h"
 
 enum class TokenType {
-    // Single-character tokens.
-    LEFT_PAREN,
+    LEFT_PAREN, // Single-character tokens.
     RIGHT_PAREN,
     LEFT_BRACE,
     RIGHT_BRACE,
@@ -15,9 +14,7 @@ enum class TokenType {
     SEMICOLON,
     SLASH,
     STAR,
-
-    // One or two character tokens.
-    BANG,
+    BANG, // One or two character tokens.
     BANG_EQUAL,
     EQUAL,
     EQUAL_EQUAL,
@@ -25,14 +22,10 @@ enum class TokenType {
     GREATER_EQUAL,
     LESS,
     LESS_EQUAL,
-
-    // Literals.
-    IDENTIFIER,
+    IDENTIFIER, // Literals.
     STRING,
     NUMBER,
-
-    // Keywords.
-    AND,
+    AND, // Keywords.
     CLASS,
     ELSE,
     FALSE,

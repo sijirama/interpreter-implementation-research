@@ -1,2 +1,23 @@
+// this won't be scanned in the scanner
+
+/*
+this won't be scanned in the scanner
+*/
+
 var language = "lox";
 print language
+
+fun addPair(a, b) {
+    return a + b;
+}
+
+fun identity(a) {
+    return a;
+}
+print identity(addPair)(1, 2);
+
+if (condition) {
+    print "yes";
+} else {
+    print "no";
+}
