@@ -1,0 +1,14 @@
+// this is an or test case
+or
+or
+or
+
+/*
+    i'm testing or in this code
+*/
+
+soowhat var name = "sijibomi"
+
+if name == "sijibomi" {
+    return true
+}

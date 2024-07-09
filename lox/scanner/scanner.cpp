@@ -85,11 +85,6 @@ void Scanner::scanToken() { // processes the character that the current index is
     case '"':
         stringLiteral();
         break;
-    case 'o':
-        if (peek() == 'r') {
-            addToken(TokenType::OR);
-        }
-        break;
     default:
         if (isDigit(c)) {
             numberLiteral();
@@ -195,7 +190,7 @@ Scanner::Scanner(string source) : source(source) {
     keywords.insert(pair<string, TokenType>("else", TokenType::ELSE));
     keywords.insert(pair<string, TokenType>("false", TokenType::FALSE));
     keywords.insert(pair<string, TokenType>("for", TokenType::FOR));
-    keywords.insert(pair<string, TokenType>("fun", TokenType::FOR));
+    keywords.insert(pair<string, TokenType>("fun", TokenType::FUN));
     keywords.insert(pair<string, TokenType>("if", TokenType::IF));
     keywords.insert(pair<string, TokenType>("nil", TokenType::NIL));
     keywords.insert(pair<string, TokenType>("or", TokenType::OR));

@@ -45,9 +45,8 @@ enum class TokenType {
 };
 
 class Token {
-  private:
+  public:
     TokenType type;
-    // std::string lexeme;
     std::string lexeme;
     std::any literal;
     int line;

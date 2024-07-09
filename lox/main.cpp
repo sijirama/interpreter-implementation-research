@@ -10,7 +10,6 @@ using namespace std;
 void run(string fileContent) {
     Scanner scanner(fileContent);
     vector<Token> tokens = scanner.scanTokens();
-
     for (Token token : tokens) {
         cout << token.toString() << endl;
     }
