@@ -1,5 +1,4 @@
-#include <ostream>
-#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+//#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <string>
 #include <vector>
 #include "../scanner/scanner.h"
