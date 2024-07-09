@@ -1,3 +1,4 @@
 lox
 main.o
 *.o
+run_tests
