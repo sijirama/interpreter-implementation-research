@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include "../token/token.h"
 
 class Expr {
   public:
@@ -22,7 +23,7 @@ class Expr {
 
 class Binary : public Expr {
   public:
-    Binary(std::shared_ptr<Expr> left, std::string operatorToken,
+    Binary(std::shared_ptr<Expr> left, Token operatorToken,
            std::shared_ptr<Expr> right)
         : left(std::move(left)), operatorToken(std::move(operatorToken)),
           right(std::move(right)) {}
@@ -32,7 +33,7 @@ class Binary : public Expr {
     }
 
     std::shared_ptr<Expr> left;
-    std::string operatorToken;
+    Token operatorToken;
     std::shared_ptr<Expr> right;
 };
 
@@ -50,25 +51,25 @@ class Grouping : public Expr {
 
 class Literal : public Expr {
   public:
-    explicit Literal(std::string value) : value(std::move(value)) {}
+    explicit Literal(std::any value) : value(std::move(value)) {}
 
     void accept(Visitor& visitor) const override {
         visitor.visitLiteralExpr(*this);
     }
 
-    std::string value;
+    std::any value;
 };
 
 class Unary : public Expr {
   public:
-    Unary(std::string operatorToken, std::shared_ptr<Expr> right)
+    Unary(Token operatorToken, std::shared_ptr<Expr> right)
         : operatorToken(std::move(operatorToken)), right(std::move(right)) {}
 
     void accept(Visitor& visitor) const override {
         visitor.visitUnaryExpr(*this);
     }
 
-    std::string operatorToken;
+    Token operatorToken;
     std::shared_ptr<Expr> right;
 };
 

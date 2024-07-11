@@ -22,8 +22,3 @@ std::string Token::toString() {
     // + " " +
     //    literalStr;
 }
-
-// std::string Token::toString() {
-//     return std::to_string(static_cast<int>(type)) + " " + lexeme;
-//     +" ";
-// }

@@ -1,4 +1,5 @@
 #include "parser.h"
+#include <memory>
 #include <vector>
 
 Token Parser::advance() {
@@ -36,14 +37,77 @@ bool Parser::matchImpl(const vector<TokenType>& tokens) {
     return false;
 }
 
-Expr* Parser::equality() {
-    Expr* expr = comparison();
+shared_ptr<Expr> Parser::equality() {
+    shared_ptr<Expr> expr = comparison();
 
     while (match(TokenType::BANG_EQUAL, TokenType::EQUAL_EQUAL)) {
         Token op = previous();
-        Expr* right = comparison();
-        expr = new Binary(expr, op, right);
+        shared_ptr<Expr> right = comparison();
+        expr = make_shared<Binary>(expr, op, right);
     }
 
     return expr;
+}
+
+shared_ptr<Expr> Parser::comparison() {
+    shared_ptr<Expr> expr = term();
+
+    while (match(TokenType::LESS, TokenType::LESS_EQUAL, TokenType::GREATER,
+                 TokenType::GREATER_EQUAL)) {
+        Token op = previous();
+        shared_ptr<Expr> right = term();
+        expr = make_shared<Binary>(expr, op, right);
+    }
+
+    return expr;
+}
+
+shared_ptr<Expr> Parser::term() {
+    shared_ptr<Expr> expr = factor();
+
+    while (match(TokenType::MINUS, TokenType::PLUS)) {
+        Token op = previous();
+        shared_ptr<Expr> right = factor();
+        expr = make_shared<Binary>(expr, op, right);
+    }
+
+    return expr;
+}
+
+shared_ptr<Expr> Parser::factor() {
+    shared_ptr<Expr> expr = unary();
+    if (match(TokenType::SLASH, TokenType::STAR)) {
+        Token op = previous();
+        shared_ptr<Expr> right = unary();
+        expr = make_shared<Binary>(expr, op, right);
+    }
+    return expr;
+}
+
+shared_ptr<Expr> Parser::unary() {
+    if (match(TokenType::BANG, TokenType::MINUS)) {
+        Token op = previous();
+        shared_ptr<Expr> right = unary();
+        return make_shared<Unary>(op, right);
+    }
+    return primary();
+}
+
+shared_ptr<Expr> Parser::primary() {
+    if (match(TokenType::FALSE))
+        return make_shared<Literal>(false);
+    if (match(TokenType::TRUE))
+        return make_shared<Literal>(true);
+    if (match(TokenType::NIL))
+        return make_shared<Literal>(nullptr);
+
+    if (match(TokenType::NUMBER, TokenType::STRING)) {
+        return make_shared<Literal>(previous().literal);
+    }
+    if (match(TokenType::LEFT_PAREN)) {
+        shared_ptr<Expr> expr = expression();
+        // consume(TokenType::RIGHT_PAREN, "Exprect ')' after expression");
+        return make_shared<Grouping>(expr);
+    }
+    return nullptr;
 }
