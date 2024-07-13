@@ -3,6 +3,8 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include "AST/print.h"
+#include "parser/parser.h"
 #include "scanner/scanner.h"
 
 using namespace std;
@@ -10,9 +12,16 @@ using namespace std;
 void run(string fileContent) {
     Scanner scanner(fileContent);
     vector<Token> tokens = scanner.scanTokens();
+    Parser parser = Parser(tokens);
+
     for (Token token : tokens) {
         cout << token.toString() << endl;
     }
+
+    auto expression = parser.parse();
+    ASTPrinter printer;
+    auto value = printer.print(*expression);
+    cout << value << endl;
 }
 
 void runFile(string filename) {
