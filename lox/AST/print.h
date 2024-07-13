@@ -3,6 +3,7 @@
 
 #include <sstream>
 #include <string>
+#include "../utils/util.h"
 #include "Expr.h"
 
 class ASTPrinter : Expr::Visitor {
@@ -41,10 +42,6 @@ class ASTPrinter : Expr::Visitor {
         parenthesize("group", {expr.expression.get()});
     }
 
-    // void visitLiteralExpr(const Literal& expr) override {
-    //     result = expr.value.empty() ? "nil" : expr.value;
-    // }
-
     void visitLiteralExpr(const Literal& expr) override {
         if (expr.value.has_value()) {
             if (expr.value.type() == typeid(std::string)) {
@@ -57,11 +54,11 @@ class ASTPrinter : Expr::Visitor {
                 int value = std::any_cast<int>(expr.value);
                 result = std::to_string(value);
             } else {
-                // Handle other types as needed
-                result = "nil";
+                result = "type not checked";
             }
         } else {
-            result = "nil"; // Handle case where expr.value is empty
+            result =
+                "nothing was added"; // Handle case where expr.value is empty
         }
     }
 

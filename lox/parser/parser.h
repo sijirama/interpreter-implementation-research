@@ -1,14 +1,39 @@
+#include <iostream>
 #include <memory>
+#include <stdexcept>
 #include <vector>
 #include "../AST/Expr.h"
+#include "../error/error.h"
 
 class Parser {
   private:
     const vector<Token> tokens;
     int current = 0;
 
+    class ParseError : runtime_error {
+      public:
+        ParseError() : std::runtime_error("Parse error"){};
+        explicit ParseError(const std::string& message)
+            : std::runtime_error(message) {}
+    };
+
+    ParseError Error(Token token, string message) {
+        LoxError(token, message);
+        return ParseError("Parse Error found");
+    }
+
   public:
     Parser(const vector<Token>& tokens) : tokens(tokens) {}
+
+    shared_ptr<Expr> parse() {
+        try {
+            return expression();
+        } catch (ParseError& error) {
+            return nullptr;
+        }
+    }
+
+    void synchronize();
 
     // utils
     template <typename... Args>
@@ -31,7 +56,7 @@ class Parser {
 
     Token previous() { return tokens[current - 1]; }
 
-    void consume();
+    Token consume(TokenType, string);
 
     // main stuff
 

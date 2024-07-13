@@ -1,7 +1,9 @@
 #ifndef Expr_H
 #define Expr_H
 
+#include <any>
 #include <memory>
+#include <ostream>
 #include <string>
 #include "../token/token.h"
 
@@ -51,10 +53,22 @@ class Grouping : public Expr {
 
 class Literal : public Expr {
   public:
-    explicit Literal(std::any value) : value(std::move(value)) {}
+    Literal(std::any value) {
+        cout << "The stuff of the stuff is: " << any_cast<string>(&value)
+             << endl;
+        this->value = value;
+    }
 
     void accept(Visitor& visitor) const override {
         visitor.visitLiteralExpr(*this);
+    }
+
+    void printValue() {
+        std::cout << "WHAT IS THE NAME OF THE VALUE" << std::endl;
+        std::cout << "WHAT IS THE NAME OF THE VALUE" << std::endl;
+        std::cout << any_cast<string>(&value) << std::endl;
+        std::cout << "The value is:" << any_cast<string>(&value) << " <--- "
+                  << std::endl;
     }
 
     std::any value;

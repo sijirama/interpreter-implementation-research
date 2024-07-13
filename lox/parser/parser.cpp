@@ -37,6 +37,31 @@ bool Parser::matchImpl(const vector<TokenType>& tokens) {
     return false;
 }
 
+void Parser::synchronize() {
+    advance();
+    while (!isAtEnd()) {
+        if (previous().type == TokenType::SEMICOLON)
+            return;
+
+        switch (peek().type) {
+        case TokenType::CLASS:
+        case TokenType::FUN:
+        case TokenType::VAR:
+        case TokenType::FOR:
+        case TokenType::IF:
+        case TokenType::WHILE:
+        case TokenType::PRINT:
+        case TokenType::RETURN:
+            return;
+        default:
+            continue; // WARN: this can be extremely wrong, just keeping this
+                      // here incase to pinpoint
+        }
+
+        advance();
+    }
+}
+
 shared_ptr<Expr> Parser::equality() {
     shared_ptr<Expr> expr = comparison();
 
@@ -106,8 +131,15 @@ shared_ptr<Expr> Parser::primary() {
     }
     if (match(TokenType::LEFT_PAREN)) {
         shared_ptr<Expr> expr = expression();
-        // consume(TokenType::RIGHT_PAREN, "Exprect ')' after expression");
+        consume(TokenType::RIGHT_PAREN, "Exprect ')' after expression");
         return make_shared<Grouping>(expr);
     }
-    return nullptr;
+
+    throw Error(peek(), "Expect expression");
+}
+
+Token Parser::consume(TokenType type, string message) {
+    if (check(type))
+        return advance();
+    throw Error(peek(), message);
 }

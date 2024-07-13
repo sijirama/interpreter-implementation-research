@@ -1,3 +1,6 @@
+#ifndef TOKEN_H
+#define TOKEN_H
+
 #include <any>
 #include <string>
 #include "../utils/util.h"
@@ -55,3 +58,5 @@ class Token {
     Token(TokenType type, std::string lexeme, std::any literal, int line);
     std::string toString();
 };
+
+#endif
