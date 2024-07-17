@@ -62,6 +62,23 @@ void Parser::synchronize() {
     }
 }
 
+shared_ptr<Expr> Parser::parse() {
+    try {
+        // For now, let's just try to parse a single expression
+        return expression();
+    } catch (const ParseError& error) {
+        // std::cerr << "Parse error: " << error.what() << std::endl;
+        return nullptr;
+    }
+}
+
+shared_ptr<Expr> Parser::expression() {
+    if (match(TokenType::PRINT)) {
+        return make_shared<Literal>("print statement");
+    };
+    return equality();
+}
+
 shared_ptr<Expr> Parser::equality() {
     shared_ptr<Expr> expr = comparison();
 

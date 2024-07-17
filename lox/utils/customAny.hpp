@@ -18,7 +18,9 @@ class CustomAny {
     }
 
     std::string checkEmptyAndReturnNil(const std::string& str) const {
-        return str.empty() ? "nil" : str;
+        // return str.empty() ? "nil" : str;
+        return str.size() == 0 ? "nil" : str;
+        // return str;
     }
 
   public:

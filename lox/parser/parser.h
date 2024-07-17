@@ -25,14 +25,7 @@ class Parser {
   public:
     Parser(const vector<Token>& tokens) : tokens(tokens) {}
 
-    shared_ptr<Expr> parse() {
-        try {
-            return expression();
-        } catch (ParseError& error) {
-            return nullptr;
-        }
-    }
-
+    shared_ptr<Expr> parse();
     void synchronize();
 
     // utils
@@ -60,7 +53,7 @@ class Parser {
 
     // main stuff
 
-    shared_ptr<Expr> expression() { return equality(); }
+    shared_ptr<Expr> expression();
     shared_ptr<Expr> equality();
     shared_ptr<Expr> comparison();
     shared_ptr<Expr> term();

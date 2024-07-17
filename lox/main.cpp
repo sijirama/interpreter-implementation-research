@@ -14,9 +14,9 @@ void run(string fileContent) {
     vector<Token> tokens = scanner.scanTokens();
     Parser parser = Parser(tokens);
 
-    for (Token token : tokens) {
-        cout << token.toString() << endl;
-    }
+    // for (Token token : tokens) {
+    //     cout << token.toString() << endl;
+    // }
 
     auto expression = parser.parse();
     ASTPrinter printer;
