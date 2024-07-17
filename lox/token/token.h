@@ -3,6 +3,7 @@
 
 #include <any>
 #include <string>
+#include "../utils/customAny.hpp"
 #include "../utils/util.h"
 
 enum class TokenType {
@@ -51,7 +52,7 @@ class Token {
   public:
     TokenType type;
     std::string lexeme;
-    std::any literal;
+    CustomAny literal;
     int line;
 
   public:

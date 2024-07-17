@@ -1,6 +1,7 @@
 #ifndef ASTPRINT_H
 #define ASTPRINT_H
 
+#include <any>
 #include <sstream>
 #include <string>
 #include "../utils/util.h"
@@ -34,7 +35,7 @@ class ASTPrinter : Expr::Visitor {
     }
 
     void visitBinaryExpr(const Binary& expr) override {
-        parenthesize(castAny<string>(expr.operatorToken.literal),
+        parenthesize(expr.operatorToken.literal.toString(),
                      {expr.left.get(), expr.right.get()});
     }
 
@@ -43,27 +44,28 @@ class ASTPrinter : Expr::Visitor {
     }
 
     void visitLiteralExpr(const Literal& expr) override {
-        if (expr.value.has_value()) {
-            if (expr.value.type() == typeid(std::string)) {
-                std::string value = std::any_cast<std::string>(expr.value);
-                result = value.empty() ? "nil" : value;
-            } else if (expr.value.type() == typeid(bool)) {
-                bool value = std::any_cast<bool>(expr.value);
-                result = value ? "true" : "false";
-            } else if (expr.value.type() == typeid(int)) {
-                int value = std::any_cast<int>(expr.value);
-                result = std::to_string(value);
-            } else {
-                result = "type not checked";
-            }
-        } else {
-            result =
-                "nothing was added"; // Handle case where expr.value is empty
-        }
+        result = expr.value.toString();
+        // if (expr.value.has_value()) {
+        //     if (expr.value.type() == typeid(std::string)) {
+        //         std::string value = std::any_cast<std::string>(expr.value);
+        //         result = value.empty() ? "nil" : value;
+        //     } else if (expr.value.type() == typeid(bool)) {
+        //         bool value = std::any_cast<bool>(expr.value);
+        //         result = value ? "true" : "false";
+        //     } else if (expr.value.type() == typeid(int)) {
+        //         int value = std::any_cast<int>(expr.value);
+        //         result = std::to_string(value);
+        //     } else {
+        //         result = "type not checked";
+        //     }
+        // } else {
+        //     result =
+        //         "nothing was added"; // Handle case where expr.value is empty
+        // }
     }
 
     void visitUnaryExpr(const Unary& expr) override {
-        parenthesize(castAny<string>(expr.operatorToken), {expr.right.get()});
+        parenthesize(expr.operatorToken.literal.toString(), {expr.right.get()});
     }
 };
 

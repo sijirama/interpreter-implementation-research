@@ -6,6 +6,7 @@
 #include <ostream>
 #include <string>
 #include "../token/token.h"
+#include "../utils/customAny.hpp"
 
 class Expr {
   public:
@@ -53,10 +54,17 @@ class Grouping : public Expr {
 
 class Literal : public Expr {
   public:
-    Literal(std::any value) {
-        cout << "The stuff of the stuff is: " << any_cast<string>(&value)
-             << endl;
-        this->value = value;
+    Literal(std::any value) : value(value) {
+        // cout << "The stuff of the stuff is: " << th  << endl;
+
+        // cout << "The stuff of the stuff is: " << any_cast<string>(&value)
+        //      << endl;
+        // this->value = value;
+        // auto type = value.type().name();
+        // std::cout << "we check for the type in the constructor of the arg and
+        // "
+        //              "it gives us: "
+        //           << type << std::endl;
     }
 
     void accept(Visitor& visitor) const override {
@@ -65,13 +73,17 @@ class Literal : public Expr {
 
     void printValue() {
         std::cout << "WHAT IS THE NAME OF THE VALUE" << std::endl;
-        std::cout << "WHAT IS THE NAME OF THE VALUE" << std::endl;
-        std::cout << any_cast<string>(&value) << std::endl;
-        std::cout << "The value is:" << any_cast<string>(&value) << " <--- "
+        std::cout << value.getType().name() << std::endl;
+        std::cout << "The value is:" << value.toString() << " <--- "
+                  << std::endl;
+
+        std::cout << "========================================================="
+                     "=========================================="
                   << std::endl;
     }
 
-    std::any value;
+    // std::any value;
+    CustomAny value;
 };
 
 class Unary : public Expr {

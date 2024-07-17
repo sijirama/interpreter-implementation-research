@@ -1,16 +1,5 @@
 #include "util.h"
-#include <any>
-#include <iostream>
 #include <stdexcept>
-
-// template <typename T> T castAny(std::any value) {
-//     try {
-//         return std::any_cast<T>(value);
-//     } catch (const std::bad_any_cast& e) {
-//         std::cerr << "Bad any cast: " << e.what() << std::endl;
-//         throw;
-//     }
-// }
 
 std::string substring(const std::string& str, int beginIndex, int endIndex) {
     int strSize = static_cast<int>(str.size());
