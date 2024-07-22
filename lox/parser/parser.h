@@ -60,4 +60,6 @@ class Parser {
     shared_ptr<Expr> factor();
     shared_ptr<Expr> unary();
     shared_ptr<Expr> primary();
+    shared_ptr<Expr> comma();
+    shared_ptr<Expr> ternary();
 };

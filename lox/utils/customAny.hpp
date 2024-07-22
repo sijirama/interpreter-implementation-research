@@ -3,6 +3,8 @@
 #define CUSTOM_ANY_HPP
 
 #include <any>
+#include <cstring>
+#include <limits>
 #include <memory>
 #include <sstream>
 #include <string>
@@ -42,6 +44,8 @@ class CustomAny {
     template <typename T> bool is() const { return value.type() == typeid(T); }
 
     std::string convertPKctoString(const char* val) { return std::string(val); }
+
+    bool isNull() const { return !value.has_value(); }
 
     std::string toString() const {
         if (is<std::shared_ptr<std::string>>())
@@ -117,6 +121,67 @@ class CustomAny {
     const std::type_info& getType() const { return value.type(); }
 
     const std::type_info& type() const { return value.type(); }
+
+    double toDouble() const {
+        if (is<double>()) {
+            return get<double>();
+        } else if (is<int>()) {
+            return static_cast<double>(get<int>());
+        } else if (is<float>()) {
+            return static_cast<double>(get<float>());
+        } else if (is<std::string>()) {
+            try {
+                return std::stod(get<std::string>());
+            } catch (const std::invalid_argument& e) {
+                throw std::runtime_error("Cannot convert string to double");
+            }
+        } else if (isNull()) {
+            throw std::runtime_error("Cannot convert null to double");
+        } else {
+            throw std::runtime_error("Unsupported type for double conversion");
+        }
+    }
+
+    bool equals(const CustomAny& other) const {
+        // If both are null, they're equal
+        if (isNull() && other.isNull()) {
+            return true;
+        }
+
+        // If one is null and the other isn't, they're not equal
+        if (isNull() || other.isNull()) {
+            return false;
+        }
+
+        // If types are different, they're not equal
+        if (value.type() != other.value.type()) {
+            // Special case: compare int and double
+            if ((is<int>() && other.is<double>()) ||
+                (is<double>() && other.is<int>())) {
+                return std::abs(toDouble() - other.toDouble()) <
+                       std::numeric_limits<double>::epsilon();
+            }
+            return false;
+        }
+
+        // Compare based on type
+        if (is<double>()) {
+            return std::abs(get<double>() - other.get<double>()) <
+                   std::numeric_limits<double>::epsilon();
+        } else if (is<int>()) {
+            return get<int>() == other.get<int>();
+        } else if (is<std::string>()) {
+            return get<std::string>() == other.get<std::string>();
+        } else if (is<bool>()) {
+            return get<bool>() == other.get<bool>();
+        }
+
+        // For types we don't explicitly handle, use std::any's comparison
+        return value.type() == other.value.type() &&
+               std::memcmp(std::any_cast<void>(&value),
+                           std::any_cast<void>(&other.value),
+                           value.type().hash_code()) == 0;
+    }
 };
 
 #endif

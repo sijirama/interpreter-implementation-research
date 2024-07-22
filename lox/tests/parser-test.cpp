@@ -29,34 +29,37 @@ TEST_CASE("Parser works") {
         cout << "Failed to parse expression" << endl;
     }
 }
-//
-// TEST_CASE("Parser works") {
-//     std::string source = R"(
-//         // this won't be scanned in the scanner
-//
-//         /*
-//         this won't be scanned in the scanner
-//
-//         var language = "lox";
-//         var region = "africa";
-//         */
-//         print language
-//
-//         fun addPair(a, b) {
-//             return a + b;
-//         }
-//     )";
-//     Scanner scanner(source);
-//     vector<Token> tokens = scanner.scanTokens();
-//
-//     cout << "============================================" << endl;
-//     for (Token token : tokens) {
-//         cout << token.toString() << endl;
-//     }
-//     cout << "============================================" << endl;
-//     Parser parser = Parser(tokens);
-//     auto expr = parser.parse();
-//     ASTPrinter printer;
-//     auto value = printer.print(*expr);
-//     cout << value << endl;
-// }
+
+TEST_CASE("Parser works") {
+    std::string source = R"(
+        // this won't be scanned in the scanner
+
+        /*
+        this won't be scanned in the scanner
+
+        */
+        print 44;
+
+        var language = "lox";
+        var region = "africa";
+
+        print language
+
+        fun addPair(a, b) {
+            return a + b;
+        }
+    )";
+    Scanner scanner(source);
+    vector<Token> tokens = scanner.scanTokens();
+
+    cout << "============================================" << endl;
+    for (Token token : tokens) {
+        cout << token.toString() << endl;
+    }
+    cout << "============================================" << endl;
+    Parser parser = Parser(tokens);
+    auto expr = parser.parse();
+    ASTPrinter printer;
+    auto value = printer.print(*expr);
+    cout << value << endl;
+}

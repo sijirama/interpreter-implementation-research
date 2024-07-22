@@ -135,6 +135,30 @@ shared_ptr<Expr> Parser::unary() {
     return primary();
 }
 
+shared_ptr<Expr> Parser::comma() {
+    shared_ptr<Expr> expr = equality();
+
+    while (match(TokenType::COMMA)) {
+        Token op = previous();
+        shared_ptr<Expr> right = equality();
+        expr = make_shared<Binary>(expr, op, right);
+    }
+
+    return expr;
+}
+
+// shared_ptr<Expr> Parser::ternary() { //idk how to do it
+//     shared_ptr<Expr> expr = equality();
+//
+//     while (match(TokenType::)) {
+//         Token op = previous();
+//         shared_ptr<Expr> right = equality();
+//         expr = make_shared<Binary>(expr, op, right);
+//     }
+//
+//     return expr;
+// }
+
 shared_ptr<Expr> Parser::primary() {
     if (match(TokenType::FALSE))
         return make_shared<Literal>(false);
