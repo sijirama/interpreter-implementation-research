@@ -5,7 +5,10 @@
 #include "../token/token.h"
 
 class RuntimeError : runtime_error {
+
     Token token;
+
+  public:
     RuntimeError(Token token, const std::string& message)
         : std::runtime_error(message), token(token) {}
 };
