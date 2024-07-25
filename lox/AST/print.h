@@ -11,8 +11,8 @@ class ASTPrinter : Expr::Visitor {
   private:
     std::string result;
 
-    void parenthesize(const std::string& name,
-                      std::initializer_list<const Expr*> exprs) {
+    CustomAny parenthesize(const std::string& name,
+                           std::initializer_list<const Expr*> exprs) {
         std::ostringstream builder;
         builder << "(" << name;
 
@@ -25,47 +25,31 @@ class ASTPrinter : Expr::Visitor {
         }
 
         builder << ")";
-        result = builder.str();
+        return CustomAny(builder.str());
     }
 
   public:
     std::string print(Expr& expr) {
-        expr.accept(*this);
-        return result;
+        CustomAny result = expr.accept(*this);
+        return result.toString();
     }
 
-    void visitBinaryExpr(const Binary& expr) override {
-        parenthesize(expr.operatorToken.literal.toString(),
-                     {expr.left.get(), expr.right.get()});
+    CustomAny visitBinaryExpr(const Binary& expr) override {
+        return parenthesize(expr.operatorToken.literal.toString(),
+                            {expr.left.get(), expr.right.get()});
     }
 
-    void visitGroupingExpr(const Grouping& expr) override {
-        parenthesize("group", {expr.expression.get()});
+    CustomAny visitGroupingExpr(const Grouping& expr) override {
+        return parenthesize("group", {expr.expression.get()});
     }
 
-    void visitLiteralExpr(const Literal& expr) override {
-        result = expr.value.toString();
-        // if (expr.value.has_value()) {
-        //     if (expr.value.type() == typeid(std::string)) {
-        //         std::string value = std::any_cast<std::string>(expr.value);
-        //         result = value.empty() ? "nil" : value;
-        //     } else if (expr.value.type() == typeid(bool)) {
-        //         bool value = std::any_cast<bool>(expr.value);
-        //         result = value ? "true" : "false";
-        //     } else if (expr.value.type() == typeid(int)) {
-        //         int value = std::any_cast<int>(expr.value);
-        //         result = std::to_string(value);
-        //     } else {
-        //         result = "type not checked";
-        //     }
-        // } else {
-        //     result =
-        //         "nothing was added"; // Handle case where expr.value is empty
-        // }
+    CustomAny visitLiteralExpr(const Literal& expr) override {
+        return expr.value;
     }
 
-    void visitUnaryExpr(const Unary& expr) override {
-        parenthesize(expr.operatorToken.literal.toString(), {expr.right.get()});
+    CustomAny visitUnaryExpr(const Unary& expr) override {
+        return parenthesize(expr.operatorToken.literal.toString(),
+                            {expr.right.get()});
     }
 };
 

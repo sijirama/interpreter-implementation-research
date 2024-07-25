@@ -33,16 +33,6 @@ bool Interpreter::isEqual(CustomAny a, CustomAny b) {
     return a.equals(b);
 }
 
-// CustomAny Interpreter::evaluate(shared_ptr<Expr> expr) {
-//     std::ostringstream builder;
-//     std::string previous_result = result;
-//     expr->accept(*this);
-//     builder << result;
-//     result = previous_result;
-//     result = builder.str();
-//     return result;
-// }
-
 CustomAny Interpreter::evaluate(shared_ptr<Expr> expr) {
     return expr->accept(*this);
 }

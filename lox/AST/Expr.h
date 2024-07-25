@@ -15,13 +15,13 @@ class Expr {
     class Visitor {
       public:
         virtual ~Visitor() = default;
-        virtual void visitBinaryExpr(const class Binary& expr) = 0;
-        virtual void visitGroupingExpr(const class Grouping& expr) = 0;
-        virtual void visitLiteralExpr(const class Literal& expr) = 0;
-        virtual void visitUnaryExpr(const class Unary& expr) = 0;
+        virtual CustomAny visitBinaryExpr(const class Binary& expr) = 0;
+        virtual CustomAny visitGroupingExpr(const class Grouping& expr) = 0;
+        virtual CustomAny visitLiteralExpr(const class Literal& expr) = 0;
+        virtual CustomAny visitUnaryExpr(const class Unary& expr) = 0;
     };
 
-    virtual void accept(Visitor& visitor) const = 0;
+    virtual CustomAny accept(Visitor& visitor) const = 0;
 };
 
 class Binary : public Expr {
@@ -31,8 +31,8 @@ class Binary : public Expr {
         : left(std::move(left)), operatorToken(std::move(operatorToken)),
           right(std::move(right)) {}
 
-    void accept(Visitor& visitor) const override {
-        visitor.visitBinaryExpr(*this);
+    CustomAny accept(Visitor& visitor) const override {
+        return visitor.visitBinaryExpr(*this);
     }
 
     std::shared_ptr<Expr> left;
@@ -45,8 +45,8 @@ class Grouping : public Expr {
     explicit Grouping(std::shared_ptr<Expr> expression)
         : expression(std::move(expression)) {}
 
-    void accept(Visitor& visitor) const override {
-        visitor.visitGroupingExpr(*this);
+    CustomAny accept(Visitor& visitor) const override {
+        return visitor.visitGroupingExpr(*this);
     }
 
     std::shared_ptr<Expr> expression;
@@ -67,8 +67,8 @@ class Literal : public Expr {
         //           << type << std::endl;
     }
 
-    void accept(Visitor& visitor) const override {
-        visitor.visitLiteralExpr(*this);
+    CustomAny accept(Visitor& visitor) const override {
+        return visitor.visitLiteralExpr(*this);
     }
 
     void printValue() {
@@ -91,8 +91,8 @@ class Unary : public Expr {
     Unary(Token operatorToken, std::shared_ptr<Expr> right)
         : operatorToken(std::move(operatorToken)), right(std::move(right)) {}
 
-    void accept(Visitor& visitor) const override {
-        visitor.visitUnaryExpr(*this);
+    CustomAny accept(Visitor& visitor) const override {
+        return visitor.visitUnaryExpr(*this);
     }
 
     Token operatorToken;
