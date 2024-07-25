@@ -4,6 +4,31 @@
 #include <vector>
 #include "../error/error.h"
 
+CustomAny Interpreter::interprete(shared_ptr<Expr> expression) {
+    try {
+        CustomAny value = evaluate(expression);
+        return value;
+    } catch (RuntimeError error) {
+        runtimeErrorReporter(error);
+        return NULL;
+    }
+}
+
+std::string Interpreter::stringify(const CustomAny& object) {
+    if (object.isNull())
+        return "nil";
+
+    if (object.is<double>()) {
+        std::string text = object.toString();
+        if (text.length() > 2 && text.substr(text.length() - 2) == ".0") {
+            text = text.substr(0, text.length() - 2);
+        }
+        return text;
+    }
+
+    return object.toString();
+}
+
 template <typename... Args>
 void Interpreter::checkNumberOperands(const Token& op, const Args&... args) {
     // check if the operands in an expr is a number
@@ -46,16 +71,16 @@ bool Interpreter::isTruthy(CustomAny val) {
     return true;
 }
 
-CustomAny Interpreter::visitLiteralExpr(Literal& expr) {
+CustomAny Interpreter::visitLiteralExpr(const Literal& expr) {
     ;
     return expr.value;
 }
 
-CustomAny Interpreter::visitGroupingExpr(Grouping& expr) {
+CustomAny Interpreter::visitGroupingExpr(const Grouping& expr) {
     return evaluate(expr.expression);
 }
 
-CustomAny Interpreter::visitUnaryExpr(Unary& expr) {
+CustomAny Interpreter::visitUnaryExpr(const Unary& expr) {
     CustomAny right = expr.right;
 
     switch (expr.operatorToken.type) {
@@ -78,7 +103,7 @@ CustomAny Interpreter::visitUnaryExpr(Unary& expr) {
     return NULL;
 }
 
-CustomAny Interpreter::visitBinaryExpr(Binary& expr) {
+CustomAny Interpreter::visitBinaryExpr(const Binary& expr) {
     CustomAny right = expr.right;
     CustomAny left = expr.left;
 

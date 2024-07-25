@@ -15,8 +15,10 @@ class Interpreter : Expr::Visitor {
     void checkNumberOperands(const Token& op, const Args&... args);
 
   public:
-    CustomAny visitLiteralExpr(Literal& expr);
-    CustomAny visitGroupingExpr(Grouping& expr);
-    CustomAny visitUnaryExpr(Unary& expr);
-    CustomAny visitBinaryExpr(Binary& expr);
+    std::string stringify(const CustomAny& object);
+    CustomAny interprete(shared_ptr<Expr> expression);
+    CustomAny visitLiteralExpr(const Literal& expr) override;
+    CustomAny visitGroupingExpr(const Grouping& expr) override;
+    CustomAny visitUnaryExpr(const Unary& expr) override;
+    CustomAny visitBinaryExpr(const Binary& expr) override;
 };

@@ -4,7 +4,7 @@ CXXFLAGS = -Wall -Wextra -std=c++17
 
 SRCS = main.cpp error/error.cpp scanner/scanner.cpp token/token.cpp utils/util.cpp parser/parser.cpp
 
-TEST_SRCS = tests/parser-test.cpp tests/ast-test.cpp tests/scanner-test.cpp error/error.cpp scanner/scanner.cpp token/token.cpp utils/util.cpp parser/parser.cpp 
+TEST_SRCS = tests/interpreter.cpp tests/parser-test.cpp tests/ast-test.cpp tests/scanner-test.cpp error/error.cpp scanner/scanner.cpp token/token.cpp utils/util.cpp parser/parser.cpp interpreter/interpreter.cpp utils/util.cpp
 #parser/parser.cpp
 
 TARGET = lox
