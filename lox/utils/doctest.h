@@ -1936,7 +1936,7 @@ class ExceptionTranslator
             res = m_translateFunction(ex); //! OCLINT parameter reassignment
             return true;
         } catch (...) {
-        }                       //! OCLINT -  empty catch statement
+        } //! OCLINT -  empty catch statement
 #endif                          // DOCTEST_CONFIG_NO_EXCEPTIONS
         static_cast<void>(res); // to silence -Wunused-parameter
         return false;
@@ -2535,18 +2535,18 @@ int registerReporter(const char* name, int priority, bool isReporter) {
 
 #ifndef DOCTEST_CONFIG_SUPER_FAST_ASSERTS
 
-#define DOCTEST_ASSERT_IMPLEMENT_2(assert_type, ...)                                                     \
-    DOCTEST_CLANG_SUPPRESS_WARNING_WITH_PUSH(                                                            \
-        "-Woverloaded-shift-op-parentheses")                                                             \
-    /* NOLINTNEXTLINE(clang-analyzer-cplusplus.NewDeleteLeaks) */                                        \
-    doctest::detail::ResultBuilder DOCTEST_RB(                                                           \
-        doctest::assertType::assert_type, __FILE__, __LINE__, #__VA_ARGS__);                             \
-    DOCTEST_WRAP_IN_TRY(                                                                                 \
-        DOCTEST_RB.setResult(doctest::detail::ExpressionDecomposer(                                      \
-                                 doctest::assertType::assert_type)                                       \
-                             << __VA_ARGS__)) /* NOLINTNEXTLINE(clang-analyzer-cplusplus.NewDeleteLeaks) \
-                                               */                                                        \
-    DOCTEST_ASSERT_LOG_REACT_RETURN(DOCTEST_RB)                                                          \
+#define DOCTEST_ASSERT_IMPLEMENT_2(assert_type, ...)                                \
+    DOCTEST_CLANG_SUPPRESS_WARNING_WITH_PUSH(                                       \
+        "-Woverloaded-shift-op-parentheses")                                        \
+    /* NOLINTNEXTLINE(clang-analyzer-cplusplus.NewDeleteLeaks) */                   \
+    doctest::detail::ResultBuilder DOCTEST_RB(                                      \
+        doctest::assertType::assert_type, __FILE__, __LINE__, #__VA_ARGS__);        \
+    DOCTEST_WRAP_IN_TRY(DOCTEST_RB.setResult(                                       \
+        doctest::detail::ExpressionDecomposer(                                      \
+            doctest::assertType::assert_type)                                       \
+        << __VA_ARGS__)) /* NOLINTNEXTLINE(clang-analyzer-cplusplus.NewDeleteLeaks) \
+                          */                                                        \
+    DOCTEST_ASSERT_LOG_REACT_RETURN(DOCTEST_RB)                                     \
     DOCTEST_CLANG_SUPPRESS_WARNING_POP
 
 #define DOCTEST_ASSERT_IMPLEMENT_1(assert_type, ...)                           \
@@ -7681,8 +7681,8 @@ int Context::run() {
 #ifndef DOCTEST_CONFIG_NO_EXCEPTIONS
                 try {
 #endif // DOCTEST_CONFIG_NO_EXCEPTIONS
-                    // MSVC 2015 diagnoses fatalConditionHandler as unused
-                    // (because reset() is a static method)
+       // MSVC 2015 diagnoses fatalConditionHandler as unused
+       // (because reset() is a static method)
                     DOCTEST_MSVC_SUPPRESS_WARNING_WITH_PUSH(
                         4101) // unreferenced local variable
                     FatalConditionHandler
