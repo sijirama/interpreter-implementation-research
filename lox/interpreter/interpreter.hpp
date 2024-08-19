@@ -3,6 +3,8 @@
 #include <memory>
 #include "../AST/Expr.h"
 
+using namespace std;
+
 class Interpreter : Expr::Visitor {
   private:
     std::string result;

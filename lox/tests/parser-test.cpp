@@ -5,6 +5,7 @@
 #include "../scanner/scanner.h"
 #include "doctest.h"
 
+using namespace std;
 TEST_CASE("Parser works") {
     std::string source = "print language";
     Scanner scanner(source);

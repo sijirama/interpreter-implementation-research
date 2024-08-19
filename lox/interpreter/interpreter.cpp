@@ -8,7 +8,7 @@ CustomAny Interpreter::interprete(shared_ptr<Expr> expression) {
     try {
         CustomAny value = evaluate(expression);
         return value;
-    } catch (RuntimeError error) {
+    } catch (RuntimeError& error) {
         runtimeErrorReporter(error);
         return NULL;
     }
@@ -59,6 +59,9 @@ bool Interpreter::isEqual(CustomAny a, CustomAny b) {
 }
 
 CustomAny Interpreter::evaluate(shared_ptr<Expr> expr) {
+    if (!expr) {
+        throw std::runtime_error("Expression is null");
+    }
     return expr->accept(*this);
 }
 

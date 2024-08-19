@@ -1,13 +1,12 @@
+
 #ifndef UTIL_H
 #define UTIL_H
 
-#include <any>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
-using namespace std;
-
-string substring(const string& str, int beginIndex, int endIndex);
-string substring(const string& str, int beginIndex);
+std::string substring(const std::string& str, int beginIndex, int endIndex);
+std::string substring(const std::string& str, int beginIndex);
 
 #endif // !UTIL_H

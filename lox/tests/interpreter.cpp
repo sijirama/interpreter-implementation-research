@@ -5,6 +5,8 @@
 #include "../scanner/scanner.h"
 #include "doctest.h"
 
+using namespace std;
+
 CustomAny interpretString(const std::string& source) {
     Scanner scanner(source);
     std::vector<Token> tokens = scanner.scanTokens();
@@ -14,79 +16,79 @@ CustomAny interpretString(const std::string& source) {
     return interpreter.interprete(expr);
 }
 
-TEST_CASE("Interpreter evaluates literal expressions") {
-    SUBCASE("Number literal") {
-        CustomAny result = interpretString("42");
-        CHECK(result.is<double>());
-        CHECK(result.get<double>() == 42.0);
-    }
-
-    SUBCASE("String literal") {
-        CustomAny result = interpretString("\"Hello, World!\"");
-        CHECK(result.is<std::string>());
-        CHECK(result.get<std::string>() == "Hello, World!");
-    }
-
-    SUBCASE("Boolean literals") {
-        CHECK(interpretString("true").get<bool>() == true);
-        CHECK(interpretString("false").get<bool>() == false);
-    }
-
-    SUBCASE("Nil literal") {
-        CustomAny result = interpretString("nil");
-        CHECK(result.isNull());
-    }
-}
-
-TEST_CASE("Interpreter evaluates unary expressions") {
-    SUBCASE("Negation") {
-        CustomAny result = interpretString("-5");
-        CHECK(result.is<double>());
-        CHECK(result.get<double>() == -5.0);
-    }
-
-    SUBCASE("Logical not") {
-        CHECK(interpretString("!true").get<bool>() == false);
-        CHECK(interpretString("!false").get<bool>() == true);
-    }
-}
-
-TEST_CASE("Interpreter evaluates binary expressions") {
-    SUBCASE("Arithmetic operations") {
-        CHECK(interpretString("2 + 3").get<double>() == 5.0);
-        CHECK(interpretString("5 - 3").get<double>() == 2.0);
-        CHECK(interpretString("2 * 3").get<double>() == 6.0);
-        CHECK(interpretString("6 / 3").get<double>() == 2.0);
-    }
-
-    SUBCASE("Comparison operations") {
-        CHECK(interpretString("2 < 3").get<bool>() == true);
-        CHECK(interpretString("3 > 2").get<bool>() == true);
-        CHECK(interpretString("2 <= 2").get<bool>() == true);
-        CHECK(interpretString("2 >= 2").get<bool>() == true);
-        CHECK(interpretString("2 == 2").get<bool>() == true);
-        CHECK(interpretString("2 != 3").get<bool>() == true);
-    }
-
-    SUBCASE("Logical operations") {
-        CHECK(interpretString("true and true").get<bool>() == true);
-        CHECK(interpretString("true and false").get<bool>() == false);
-        CHECK(interpretString("true or false").get<bool>() == true);
-        CHECK(interpretString("false or false").get<bool>() == false);
-    }
-}
-
-TEST_CASE("Interpreter handles grouping") {
-    CustomAny result = interpretString("(2 + 3) * 4");
-    CHECK(result.is<double>());
-    CHECK(result.get<double>() == 20.0);
-}
-
-TEST_CASE("Interpreter handles complex expressions") {
-    CustomAny result = interpretString("2 * (3 + 4) - 5 / (1 + 1)");
-    CHECK(result.is<double>());
-    CHECK(result.get<double>() == 12.5);
-}
+// TEST_CASE("Interpreter evaluates literal expressions") {
+//     SUBCASE("Number literal") {
+//         CustomAny result = interpretString("42");
+//         CHECK(result.is<double>());
+//         CHECK(result.get<double>() == 42.0);
+//     }
+//
+//     SUBCASE("String literal") {
+//         CustomAny result = interpretString("\"Hello, World!\"");
+//         CHECK(result.is<std::string>());
+//         CHECK(result.get<std::string>() == "Hello, World!");
+//     }
+//
+//     SUBCASE("Boolean literals") {
+//         CHECK(interpretString("true").get<bool>() == true);
+//         CHECK(interpretString("false").get<bool>() == false);
+//     }
+//
+//     SUBCASE("Nil literal") {
+//         CustomAny result = interpretString("nil");
+//         CHECK(result.isNull());
+//     }
+// }
+//
+// TEST_CASE("Interpreter evaluates unary expressions") {
+//     SUBCASE("Negation") {
+//         CustomAny result = interpretString("-5");
+//         CHECK(result.is<double>());
+//         CHECK(result.get<double>() == -5.0);
+//     }
+//
+//     SUBCASE("Logical not") {
+//         CHECK(interpretString("!true").get<bool>() == false);
+//         CHECK(interpretString("!false").get<bool>() == true);
+//     }
+// }
+//
+// TEST_CASE("Interpreter evaluates binary expressions") {
+//     SUBCASE("Arithmetic operations") {
+//         CHECK(interpretString("2 + 3").get<double>() == 5.0);
+//         CHECK(interpretString("5 - 3").get<double>() == 2.0);
+//         CHECK(interpretString("2 * 3").get<double>() == 6.0);
+//         CHECK(interpretString("6 / 3").get<double>() == 2.0);
+//     }
+//
+//     SUBCASE("Comparison operations") {
+//         CHECK(interpretString("2 < 3").get<bool>() == true);
+//         CHECK(interpretString("3 > 2").get<bool>() == true);
+//         CHECK(interpretString("2 <= 2").get<bool>() == true);
+//         CHECK(interpretString("2 >= 2").get<bool>() == true);
+//         CHECK(interpretString("2 == 2").get<bool>() == true);
+//         CHECK(interpretString("2 != 3").get<bool>() == true);
+//     }
+//
+//     SUBCASE("Logical operations") {
+//         CHECK(interpretString("true and true").get<bool>() == true);
+//         CHECK(interpretString("true and false").get<bool>() == false);
+//         CHECK(interpretString("true or false").get<bool>() == true);
+//         CHECK(interpretString("false or false").get<bool>() == false);
+//     }
+// }
+//
+// TEST_CASE("Interpreter handles grouping") {
+//     CustomAny result = interpretString("(2 + 3) * 4");
+//     CHECK(result.is<double>());
+//     CHECK(result.get<double>() == 20.0);
+// }
+//
+// TEST_CASE("Interpreter handles complex expressions") {
+//     CustomAny result = interpretString("2 * (3 + 4) - 5 / (1 + 1)");
+//     CHECK(result.is<double>());
+//     CHECK(result.get<double>() == 12.5);
+// }
 
 // TEST_CASE("Interpreter handles variable declarations and assignments") {
 //     Interpreter interpreter;

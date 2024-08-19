@@ -1,8 +1,9 @@
-//#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+// #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <string>
 #include <vector>
 #include "../scanner/scanner.h"
 #include "doctest.h"
+using namespace std;
 
 // Helper function to check token type
 void checkToken(const Token& token, TokenType expectedType,

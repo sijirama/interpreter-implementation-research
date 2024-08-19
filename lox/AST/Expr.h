@@ -8,6 +8,8 @@
 #include "../token/token.h"
 #include "../utils/customAny.hpp"
 
+using namespace std;
+
 class Expr {
   public:
     virtual ~Expr() = default;
@@ -56,15 +58,13 @@ class Literal : public Expr {
   public:
     Literal(std::any value) : value(value) {
         // cout << "The stuff of the stuff is: " << th  << endl;
-
-        // cout << "The stuff of the stuff is: " << any_cast<string>(&value)
-        //      << endl;
-        // this->value = value;
-        // auto type = value.type().name();
-        // std::cout << "we check for the type in the constructor of the arg and
-        // "
-        //              "it gives us: "
-        //           << type << std::endl;
+        cout << "The stuff of the stuff is: " << any_cast<string>(&value)
+             << endl;
+        this->value = value;
+        auto type = value.type().name();
+        std::cout << "we check for the type in the constructor of the arg and"
+                     "it gives us: "
+                  << type << std::endl;
     }
 
     CustomAny accept(Visitor& visitor) const override {

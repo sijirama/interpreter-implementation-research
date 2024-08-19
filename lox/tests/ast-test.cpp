@@ -6,6 +6,8 @@
 #include "../AST/print.h"
 #include "doctest.h"
 
+using namespace std;
+
 Token minusToken = Token(TokenType::MINUS, "-", "-", 10);
 Token starToken = Token(TokenType::STAR, "*", "*", 10);
 Token plusToken = Token(TokenType::PLUS, "+", "+", 10);
