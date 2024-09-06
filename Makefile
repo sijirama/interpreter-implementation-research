@@ -1,40 +1,27 @@
 CXX = g++
+CXXFLAGS = -std=c++11 -Wall -Wextra -pedantic
+LDFLAGS =
 
-CXXFLAGS = -Wall -Wextra -std=c++17
+SRC_DIR = src
+OBJ_DIR = obj
+BIN_DIR = bin
 
-SRCS = main.cpp error/error.cpp scanner/scanner.cpp token/token.cpp utils/util.cpp parser/parser.cpp
+SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
+OBJECTS = $(SOURCES:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+TARGET = $(BIN_DIR)/lox
 
-TEST_SRCS = tests/interpreter.cpp tests/parser-test.cpp tests/ast-test.cpp tests/scanner-test.cpp error/error.cpp scanner/scanner.cpp token/token.cpp utils/util.cpp parser/parser.cpp interpreter/interpreter.cpp 
-
-#parser/parser.cpp
-
-TARGET = lox
-
-TEST_TARGET = run_tests
-
-# Define the object files (derived from the source files)
-OBJS = $(SRCS:.cpp=.o)
-
-# Define the test object files
-TEST_OBJS = $(TEST_SRCS:.cpp=.o)
+.PHONY: all clean
 
 all: $(TARGET)
 
-$(TARGET): $(OBJS)
-	@$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
+$(TARGET): $(OBJECTS) | $(BIN_DIR)
+	$(CXX) $(LDFLAGS) $^ -o $@
 
-$(TEST_TARGET): $(TEST_OBJS)
-	@$(CXX) $(CXXFLAGS) -o $(TEST_TARGET) $(TEST_OBJS)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Rule to build the object files
-%.o: %.cpp
-	@$(CXX) $(CXXFLAGS) -c $< -o $@
+$(BIN_DIR) $(OBJ_DIR):
+	mkdir -p $@
 
 clean:
-	@rm -f $(OBJS) $(TEST_OBJS) $(TARGET) $(TEST_TARGET)
-
-# Rule to run tests
-test: $(TEST_TARGET)
-	@./$(TEST_TARGET)
-
-.PHONY: all clean test
+	rm -rf $(OBJ_DIR) $(BIN_DIR)
