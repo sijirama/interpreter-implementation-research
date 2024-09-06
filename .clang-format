@@ -1,0 +1,28 @@
+
+# .clang-format
+
+BasedOnStyle: Google
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 100
+BreakBeforeBraces: Attach
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+PointerAlignment: Left
+SpacesInParentheses: false
+SpaceBeforeParens: ControlStatements
+SpaceAfterCStyleCast: true
+IndentCaseLabels: true
+AlignTrailingComments: true
+Cpp11BracedListStyle: true
+SortIncludes: true
+IncludeBlocks: Regroup
+IncludeIsMainRegex: '([-_]main\\.|([-_]test\\.|\\.(h|hh|hpp|hxx)))'
+NamespaceIndentation: All
+ConstructorInitializerIndentWidth: 4
+AlignAfterOpenBracket: Align
+PenaltyBreakBeforeFirstCallParameter: 19
+PenaltyBreakComment: 60
+PenaltyBreakString: 1
