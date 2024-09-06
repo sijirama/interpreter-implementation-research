@@ -1,3 +1,7 @@
+/*
+    hello world
+*/
+
 var a; // declaration
 a = 2 * 20; // assignment
 
