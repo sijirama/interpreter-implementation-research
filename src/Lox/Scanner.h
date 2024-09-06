@@ -29,6 +29,7 @@ namespace Lox {
         void number();
         void identifier();
         void scanToken();
+        void handleComment();
 
         // data
         std::string source;

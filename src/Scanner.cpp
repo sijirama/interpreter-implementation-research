@@ -143,6 +143,21 @@ namespace Lox {
         }
     }
 
+    void Scanner::handleComment() {
+        while (peek() != '*' && peekNext() != '/') {
+            if (peek() == '\n')
+                line++;
+            advance();
+        }
+
+        if (isAtEnd()) {
+            Lox::Error(line, "Unterminated Comment");
+            return;
+        }
+        advance();
+        advance();
+    }
+
     void Scanner::scanToken() {
         auto c = advance();
         switch (c) {
@@ -191,6 +206,8 @@ namespace Lox {
             case '/':
                 if (match('/')) {
                     comment();
+                } else if (match('*')) {
+                    handleComment();
                 } else {
                     addToken(TokenType::Slash);
                 }
