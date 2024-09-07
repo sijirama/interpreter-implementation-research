@@ -1,11 +1,20 @@
 #include <fmt/core.h>
 
+#include <any>
 #include <fstream>
 #include <iostream>
+#include <string>
 
 #include "Lox/Error.h"
+#include "Lox/Expr/BinaryExpr.h"
+#include "Lox/Expr/Expr.h"
+#include "Lox/Expr/GroupingExpr.h"
+#include "Lox/Expr/LiteralExpr.h"
+#include "Lox/Expr/Printer.h"
+#include "Lox/Expr/UnaryExpr.h"
 #include "Lox/Scanner.h"
 #include "Lox/Token.h"
+#include "Lox/TokenType.h"
 
 #define LOX_VERSION "0.0.1"
 
@@ -57,12 +66,31 @@ void runPrompt() {
 }
 
 int main(int args, char *argv[]) {
-    if (args > 2) {
-        fmt::print("usage: lox [script]\n");
-        exit(1);
-    } else if (args == 2) {
-        runFile(argv[1]);
-    } else {
-        runPrompt();
-    }
+    // if (args > 2) {
+    //     fmt::print("usage: lox [script]\n");
+    //     exit(1);
+    // } else if (args == 2) {
+    //     runFile(argv[1]);
+    // } else {
+    //     runPrompt();
+    // }
+    // Create a new expression:
+    //  ( -123 ) * ( 45.67 )
+
+    std::unique_ptr<Lox::Expr> expression = std::make_unique<Lox::BinaryExpr>(
+        std::make_unique<Lox::UnaryExpr>(
+            Lox::Token(Lox::TokenType::Minus, "-", std::any(), 1),
+            std::make_unique<Lox::LiteralExpr>(std::make_any<int>(123))),
+        Lox::Token(Lox::TokenType::Star, "*", std::any(), 1),
+        std::make_unique<Lox::GroupingExpr>(
+            std::make_unique<Lox::LiteralExpr>(std::make_any<double>(45.67))));
+
+    // Create an AstPrinter and print the expression
+    Lox::AstPrinter printer;
+    std::any result = printer.print(*expression);
+
+    std::string final = std::any_cast<std::string>(result);
+
+    // Output the result
+    std::cout << final << std::endl;
 }
